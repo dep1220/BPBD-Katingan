@@ -101,7 +101,3 @@ php artisan optimize:clear
 - Activity log otomatis dihapus setiap hari (>30 hari)
 - File upload tersimpan di `storage/app/public/`
 - Scheduler memerlukan cron job di production
-
-## 📄 License
-
-MIT License
