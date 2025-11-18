@@ -28,6 +28,33 @@ Website resmi Badan Penanggulangan Bencana Daerah (BPBD) Kabupaten Katingan untu
 - **MySQL** - Database
 - **Blade** - Template Engine
 
+## 📦 Requirements (Server/Hosting)
+
+### Software yang Harus Diinstall:
+- **PHP** >= 8.2
+- **Composer** >= 2.0
+- **Node.js** >= 18.x & **NPM** >= 9.x
+- **MySQL** >= 8.0 / **MariaDB** >= 10.3
+- **Web Server**: Apache / Nginx
+
+### PHP Extensions:
+```
+- BCMath
+- Ctype
+- cURL
+- DOM
+- Fileinfo
+- JSON
+- Mbstring
+- OpenSSL
+- PDO
+- PDO_MySQL
+- Tokenizer
+- XML
+- ZIP
+- GD (untuk manipulasi gambar)
+```
+
 ## ⚙️ Instalasi
 
 ```bash
@@ -36,12 +63,15 @@ git clone https://github.com/dep1220/BPBD-Katingan.git
 cd BPBD-Katingan
 
 # Install dependencies
-composer install
+composer install --optimize-autoloader --no-dev
 npm install
 
 # Setup environment
 cp .env.example .env
 php artisan key:generate
+
+# Konfigurasi .env
+# Sesuaikan DB_DATABASE, DB_USERNAME, DB_PASSWORD, APP_URL
 
 # Database setup
 php artisan migrate --seed
@@ -52,8 +82,19 @@ php artisan storage:link
 # Build assets
 npm run build
 
-# Jalankan server
-php artisan serve
+# Set permissions (Linux/Unix)
+chmod -R 775 storage bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache
+
+# Clear & optimize cache
+php artisan optimize
+```
+
+### Setup Cron Job (untuk auto-cleanup Activity Log)
+
+Tambahkan ke crontab:
+```bash
+* * * * * cd /path/to/project && php artisan schedule:run >> /dev/null 2>&1
 ```
 
 ## 👤 Default Login
@@ -96,8 +137,26 @@ php artisan db:reset-auto-increment
 php artisan optimize:clear
 ```
 
+## 🔌 Package Dependencies
+
+### Backend (Composer)
+- **laravel/breeze** - Authentication scaffolding
+- **mews/purifier** - HTML sanitization (XSS protection)
+- **phpoffice/phpword** - Generate Word documents
+- **smalot/pdfparser** - Parse PDF files
+- **darkaonline/l5-swagger** - API documentation (optional)
+
+### Frontend (NPM)
+- **alpinejs** - Lightweight JavaScript framework
+- **tailwindcss** - Utility-first CSS framework
+- **@tailwindcss/forms** - Form styling
+- **@tailwindcss/typography** - Typography plugin
+- **vite** - Build tool & asset bundler
+
 ## 📝 Catatan
 
 - Activity log otomatis dihapus setiap hari (>30 hari)
 - File upload tersimpan di `storage/app/public/`
 - Scheduler memerlukan cron job di production
+- Max upload size default: 2MB (sesuaikan di `php.ini`)
+- Pastikan folder `storage` & `bootstrap/cache` writable
