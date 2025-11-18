@@ -35,9 +35,97 @@
                                 Informasi Kontak
                             </h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
+                                <div class="md:col-span-2">
                                     <label class="text-sm font-medium text-gray-600">Alamat</label>
                                     <p class="text-gray-900 mt-1">{{ $kontak->alamat }}</p>
+                                    @if($kontak->maps_url)
+                                        @php
+                                            // Extract URL from iframe or use direct link
+                                            $mapsInput = $kontak->maps_url;
+                                            $displayUrl = $mapsInput;
+                                            $embedUrl = null;
+                                            
+                                            // Check if input is an iframe
+                                            if (strpos($mapsInput, '<iframe') !== false && strpos($mapsInput, 'src=') !== false) {
+                                                // Extract src from iframe - this already has the pin
+                                                preg_match('/src=["\']([^"\']+)["\']/', $mapsInput, $matches);
+                                                if (!empty($matches[1])) {
+                                                    $embedUrl = $matches[1];
+                                                    $displayUrl = $embedUrl;
+                                                }
+                                            } else {
+                                                // It's a direct link, convert to embed with pin/marker
+                                                $displayUrl = $mapsInput;
+                                                
+                                                // Handle goo.gl short links - convert to embed format with place marker
+                                                if (strpos($mapsInput, 'goo.gl') !== false || strpos($mapsInput, 'maps.app.goo.gl') !== false) {
+                                                    // Use the link to create embed with marker (Google will handle short links)
+                                                    $embedUrl = "https://www.google.com/maps?output=embed&q=" . urlencode($mapsInput);
+                                                }
+                                                // Handle standard Google Maps links
+                                                elseif (strpos($mapsInput, 'google.com/maps') !== false) {
+                                                    // If already embed link, use as is
+                                                    if (strpos($mapsInput, '/embed') !== false || strpos($mapsInput, 'pb=') !== false) {
+                                                        $embedUrl = $mapsInput;
+                                                    } else {
+                                                        // Extract coordinates and create embed URL with marker
+                                                        if (preg_match('/@(-?\d+\.\d+),(-?\d+\.\d+)/', $mapsInput, $matches)) {
+                                                            $lat = $matches[1];
+                                                            $lng = $matches[2];
+                                                            // Use query parameter format to show marker at coordinates
+                                                            $embedUrl = "https://www.google.com/maps?q={$lat},{$lng}&output=embed";
+                                                        }
+                                                        elseif (preg_match('/q=(-?\d+\.\d+),(-?\d+\.\d+)/', $mapsInput, $matches)) {
+                                                            $lat = $matches[1];
+                                                            $lng = $matches[2];
+                                                            $embedUrl = "https://www.google.com/maps?q={$lat},{$lng}&output=embed";
+                                                        }
+                                                        // Try to extract place_id or place name
+                                                        elseif (preg_match('/place\/([^\/]+)/', $mapsInput, $matches)) {
+                                                            $place = urlencode($matches[1]);
+                                                            $embedUrl = "https://www.google.com/maps?output=embed&q={$place}";
+                                                        }
+                                                        // Fallback: use the full link as query parameter
+                                                        else {
+                                                            $embedUrl = "https://www.google.com/maps?output=embed&q=" . urlencode($mapsInput);
+                                                        }
+                                                    }
+                                                }
+                                                // Plain coordinate string like "-1.873,113.425"
+                                                elseif (preg_match('/^-?\d+\.\d+,-?\d+\.\d+$/', trim($mapsInput))) {
+                                                    list($lat, $lng) = explode(',', trim($mapsInput));
+                                                    $embedUrl = "https://www.google.com/maps?q={$lat},{$lng}&output=embed";
+                                                }
+                                                // If nothing matches, try as search query
+                                                else {
+                                                    $embedUrl = "https://www.google.com/maps?output=embed&q=" . urlencode($mapsInput);
+                                                }
+                                            }
+                                        @endphp
+                                        <a href="{{ strpos($displayUrl, '<iframe') !== false ? '#' : $displayUrl }}" target="_blank" class="inline-flex items-center mt-2 text-sm text-orange-600 hover:text-orange-700 font-medium">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            </svg>
+                                            Lihat di Peta
+                                        </a>
+                                        
+                                        {{-- Preview Peta --}}
+                                        @if($embedUrl)
+                                            <div class="mt-4">
+                                                <iframe 
+                                                    src="{{ $embedUrl }}" 
+                                                    width="100%" 
+                                                    height="300" 
+                                                    style="border:0;" 
+                                                    allowfullscreen="" 
+                                                    loading="lazy" 
+                                                    referrerpolicy="no-referrer-when-downgrade"
+                                                    class="rounded-lg shadow-md">
+                                                </iframe>
+                                            </div>
+                                        @endif
+                                    @endif
                                 </div>
                                 <div>
                                     <label class="text-sm font-medium text-gray-600">Telepon</label>
@@ -63,6 +151,20 @@
                                         <p class="text-gray-900 mt-1">-</p>
                                     @endif
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Teks Footer -->
+                        <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                                <svg class="w-6 h-6 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                </svg>
+                                Teks Footer
+                            </h3>
+                            <div>
+                                <label class="text-sm font-medium text-gray-600">Deskripsi Footer</label>
+                                <p class="text-gray-900 mt-1">{{ $kontak->footer_text ?? 'Belum diisi' }}</p>
                             </div>
                         </div>
 

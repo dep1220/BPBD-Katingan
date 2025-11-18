@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Unduhan;
+use App\Traits\LogsActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class UnduhanController extends Controller
 {
+    use LogsActivity;
     public function index()
     {
         $unduhans = Unduhan::latest()->paginate(10);
@@ -78,13 +80,16 @@ class UnduhanController extends Controller
         }
 
         // Simpan data
-        Unduhan::create([
+        $unduhan = Unduhan::create([
             'title' => $validated['title'],
             'kategori' => $kategoriValue,
             'file_path' => $path,
             'file_size' => $file->getSize(),
             'is_active' => $request->has('is_active'),
         ]);
+        
+        // Log activity
+        $this->logCreate('Unduhan', $unduhan->title);
 
         return redirect()->route('admin.unduhan.index')
             ->with('success', 'Dokumen berhasil ditambahkan.');
@@ -165,6 +170,9 @@ class UnduhanController extends Controller
             'file_size' => $fileSize,
             'is_active' => $request->has('is_active'),
         ]);
+        
+        // Log activity
+        $this->logUpdate('Unduhan', $unduhan->title);
 
         return redirect()->route('admin.unduhan.index')
             ->with('success', 'Dokumen berhasil diperbarui.');
@@ -172,10 +180,15 @@ class UnduhanController extends Controller
 
     public function destroy(Unduhan $unduhan)
     {
+        $titleUnduhan = $unduhan->title;
+        
         if ($unduhan->file_path) {
             Storage::disk('public')->delete($unduhan->file_path);
         }
         $unduhan->delete();
+        
+        // Log activity
+        $this->logDelete('Unduhan', $titleUnduhan);
 
         return redirect()->route('admin.unduhan.index')->with('success', 'Dokumen berhasil dihapus.');
     }

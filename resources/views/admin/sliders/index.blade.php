@@ -42,32 +42,35 @@
                             <table class="min-w-full bg-white">
                                 <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Urutan</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" colspan="2">Slide</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                    <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Urutan</th>
+                                    <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
+                                    <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul</th>
+                                    <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                 </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
                                 @forelse ($sliders as $slider)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-gray-500">{{ $slider->sequence }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap w-40">
-                                            <img src="{{ Storage::url($slider->image) }}" alt="{{ $slider->title }}" class="h-16 w-32 object-cover rounded">
+                                        <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-gray-500 text-sm">{{ $slider->sequence }}</td>
+                                        <td class="px-3 sm:px-6 py-4 whitespace-nowrap">
+                                            <img src="{{ Storage::url($slider->image) }}" alt="{{ $slider->title }}" class="h-12 w-20 sm:h-16 sm:w-32 object-cover rounded">
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-800">{{ $slider->title }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-3 sm:px-6 py-4 font-medium text-gray-800 text-sm">
+                                            <div class="line-clamp-2">{{ $slider->title }}</div>
+                                        </td>
+                                        <td class="px-3 sm:px-6 py-4 whitespace-nowrap">
                                             <form action="{{ route('admin.sliders.toggle', $slider) }}" method="POST">
                                                 @csrf
                                                 @method('PATCH')
                                                 @if($slider->is_active)
-                                                    <button type="submit" class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 hover:bg-green-200">Aktif</button>
+                                                    <button type="submit" class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 hover:bg-green-200">Aktif</button>
                                                 @else
-                                                    <button type="submit" class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 hover:bg-gray-200">Tidak Aktif</button>
+                                                    <button type="submit" class="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 hover:bg-gray-200">Tidak Aktif</button>
                                                 @endif
                                             </form>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <x-action-buttons
                                                 edit-url="{{ route('admin.sliders.edit', $slider) }}"
                                                 delete-url="{{ route('admin.sliders.destroy', $slider) }}"

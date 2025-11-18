@@ -38,7 +38,8 @@ class BeritaController extends Controller
         }
 
         // Increment view count
-        $berita->increment('views');
+        $berita->views = $berita->views + 1;
+        $berita->save();
 
         // Ambil berita lainnya untuk sidebar (3 berita terbaru, exclude berita saat ini)
         $relatedBeritas = Berita::published()

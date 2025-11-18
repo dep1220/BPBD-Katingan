@@ -29,8 +29,8 @@
                             </div>
                             <div x-data="{ imagePreview: '{{ Storage::url($slider->image) }}' }">
                                 <label for="image" class="block text-sm font-medium text-gray-700">Gambar</label>
-                                <input type="file" name="image" id="image" class="mt-1 block w-full" @change="imagePreview = URL.createObjectURL($event.target.files[0])">
-                                <p class="text-xs text-gray-500 mt-1">Kosongkan jika tidak ingin mengubah gambar.</p>
+                                <input type="file" name="image" id="image" class="mt-1 block w-full" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" @change="imagePreview = URL.createObjectURL($event.target.files[0])">
+                                <p class="text-xs text-gray-500 mt-1">Kosongkan jika tidak ingin mengubah gambar. Format: JPG, JPEG, PNG, GIF, WEBP (Max: 2MB)</p>
                                 <div x-show="imagePreview" class="mt-4">
                                     <img :src="imagePreview" class="h-48 w-auto object-cover rounded">
                                 </div>

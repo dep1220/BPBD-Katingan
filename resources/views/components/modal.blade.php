@@ -43,6 +43,7 @@ $maxWidth = [
     x-on:close-modal.window="$event.detail == '{{ $name }}' ? show = false : null"
     x-on:close.stop="show = false"
     x-on:keydown.escape.window="show = false"
+    x-on:keydown.enter.capture.prevent="if(show) { let confirmBtn = $el.querySelector('button[type=submit], form button:not([type=button]):last-of-type, .modal-confirm-btn'); if(confirmBtn) { confirmBtn.click(); } }"
     x-on:keydown.tab.prevent="$event.shiftKey || nextFocusable().focus()"
     x-on:keydown.shift.tab.prevent="prevFocusable().focus()"
     x-show="show"

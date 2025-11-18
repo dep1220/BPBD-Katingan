@@ -43,14 +43,14 @@
 <body class="font-sans antialiased bg-gray-50">
 {{--NAVBAR--}}
 <nav x-data="{ open: false }" class="bg-white shadow-md sticky top-0 z-50">
-    <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-20">
+    <div class="container mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16 sm:h-20">
             <div class="flex-shrink-0">
-                <a href="{{route('home')}}" class="flex items-center space-x-3">
-                    <img class="h-12 w-auto" src="{{ asset('images/logo-bpbd.png') }}" alt="Logo BPBD Katingan">
-                    <div class="hidden sm:block">
-                        <span class="block font-bold text-lg text-gray-800">BPBD</span>
-                        <span class="block text-sm text-gray-600">Kabupaten Katingan</span>
+                <a href="{{route('home')}}" class="flex items-center space-x-2 sm:space-x-3">
+                    <img class="h-10 sm:h-12 w-auto" src="{{ asset('images/logo-bpbd.png') }}" alt="Logo BPBD Katingan">
+                    <div>
+                        <span class="block font-bold text-sm sm:text-lg text-gray-800">BPBD</span>
+                        <span class="block text-xs sm:text-sm text-gray-600">Kab. Katingan</span>
                     </div>
                 </a>
             </div>
@@ -99,8 +99,8 @@
                 </div>
             </div>
 
-            <div class="-mr-2 flex md:hidden">
-                <button @click="open = !open" type="button" class="bg-gray-100 inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:bg-orange-500 hover:text-white focus:outline-none">
+            <div class="-mr-1 flex md:hidden">
+                <button @click="open = !open" type="button" class="inline-flex items-center justify-center p-2 rounded-lg text-gray-600 hover:bg-orange-50 hover:text-orange-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-orange-500 transition-all duration-200">
                     <span class="sr-only">Buka menu</span>
                     <svg :class="{ 'hidden': open, 'block': !open }" class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -113,23 +113,117 @@
         </div>
     </div>
 
-    <div :class="{ 'block': open, 'hidden': !open }" class="md:hidden">
-        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-500 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">Beranda</a>
+    {{-- Mobile Menu --}}
+    <div x-show="open" 
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 -translate-y-1"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 -translate-y-1"
+         class="md:hidden border-t border-gray-200" 
+         style="display: none;">
+        <div class="px-3 pt-2 pb-3 space-y-1">
+            <a href="{{ route('home') }}" 
+               class="{{ request()->routeIs('home') ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600' }} block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span>Beranda</span>
+                </div>
+            </a>
 
-            <div>
-                <span class="{{ request()->routeIs('visi-misi', 'struktur-organisasi') ? 'bg-orange-500 text-white' : 'text-gray-700' }} block px-3 py-2 rounded-md text-base font-medium">Profil</span>
-                <div class="pl-4">
-                    <a href="{{ route('visi-misi') }}" class="{{ request()->routeIs('visi-misi') ? 'bg-orange-500 text-white' : 'text-gray-600 hover:bg-orange-500 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium"> - Visi & Misi</a>
-                    <a href="{{ route('struktur-organisasi') }}" class="{{ request()->routeIs('struktur-organisasi') ? 'bg-orange-500 text-white' : 'text-gray-600 hover:bg-orange-500 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium"> - Struktur Organisasi</a>
+            {{-- Profil Dropdown --}}
+            <div x-data="{ openProfil: {{ request()->routeIs('visi-misi', 'struktur-organisasi') ? 'true' : 'false' }} }">
+                <button @click="openProfil = !openProfil" 
+                        class="{{ request()->routeIs('visi-misi', 'struktur-organisasi') ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600' }} w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                        <span>Profil</span>
+                    </div>
+                    <svg :class="{ 'rotate-180': openProfil }" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+                <div x-show="openProfil" 
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 -translate-y-1"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     class="mt-1 ml-4 space-y-1"
+                     style="display: none;">
+                    <a href="{{ route('visi-misi') }}" 
+                       class="{{ request()->routeIs('visi-misi') ? 'bg-orange-100 text-orange-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} block px-4 py-2 rounded-lg text-sm transition-all duration-200">
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                            <span>Visi & Misi</span>
+                        </div>
+                    </a>
+                    <a href="{{ route('struktur-organisasi') }}" 
+                       class="{{ request()->routeIs('struktur-organisasi') ? 'bg-orange-100 text-orange-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} block px-4 py-2 rounded-lg text-sm transition-all duration-200">
+                        <div class="flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                            <span>Struktur Organisasi</span>
+                        </div>
+                    </a>
                 </div>
             </div>
 
-            <a href="{{ route('berita.index') }}" class="{{ request()->routeIs('berita.*') ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-500 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">Berita</a>
-            <a href="{{route('public.agenda.index')}}" class="{{ request()->routeIs('public.agenda.*') ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-500 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">Agenda</a>
-            <a href="{{ route('galeri.index') }}" class="{{ request()->routeIs('galeri.*') ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-500 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">Galeri</a>
-            <a href="{{ route('unduhan.index') }}" class="{{ request()->routeIs('unduhan.*') ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-500 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">Unduhan</a>
-            <a href="{{ route('kontak.index') }}" class="{{ request()->routeIs('kontak.*') ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-500 hover:text-white' }} block px-3 py-2 rounded-md text-base font-medium">Kontak</a>
+            <a href="{{ route('berita.index') }}" 
+               class="{{ request()->routeIs('berita.*') ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600' }} block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                    </svg>
+                    <span>Berita</span>
+                </div>
+            </a>
+
+            <a href="{{route('public.agenda.index')}}" 
+               class="{{ request()->routeIs('public.agenda.*') ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600' }} block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>Agenda</span>
+                </div>
+            </a>
+
+            <a href="{{ route('galeri.index') }}" 
+               class="{{ request()->routeIs('galeri.*') ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600' }} block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>Galeri</span>
+                </div>
+            </a>
+
+            <a href="{{ route('unduhan.index') }}" 
+               class="{{ request()->routeIs('unduhan.*') ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600' }} block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span>Unduhan</span>
+                </div>
+            </a>
+
+            <a href="{{ route('kontak.index') }}" 
+               class="{{ request()->routeIs('kontak.*') ? 'bg-orange-500 text-white' : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600' }} block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <span>Kontak</span>
+                </div>
+            </a>
         </div>
     </div>
 </nav>
@@ -179,7 +273,11 @@
             <div>
                 <h3 class="text-lg font-semibold">BPBD KATINGAN</h3>
                 <p class="mt-4 text-blue-200">
-                    Badan Penanggulangan Bencana Daerah Kabupaten Katingan. Siap melayani dan melindungi masyarakat dari ancaman bencana.
+                    @if($informasiKontak && $informasiKontak->footer_text)
+                        {{ $informasiKontak->footer_text }}
+                    @else
+                        Badan Penanggulangan Bencana Daerah Kabupaten Katingan. Siap melayani dan melindungi masyarakat dari ancaman bencana.
+                    @endif
                 </p>
             </div>
             <div>

@@ -4,14 +4,14 @@
 
 @section('content')
 
-    <section class="py-16 sm:py-24 bg-white">
+    <section class="py-8 sm:py-12 md:py-16 lg:py-24 bg-white">
         <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="lg:grid lg:grid-cols-3 lg:gap-12">
+            <div class="lg:grid lg:grid-cols-3 lg:gap-8 xl:gap-12">
 
                 <div class="lg:col-span-2">
 
-                    <div class="border-b border-gray-200 pb-6 mb-8">
-                        <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500">
+                    <div class="border-b border-gray-200 pb-4 sm:pb-6 mb-6 sm:mb-8">
+                        <div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-gray-500">
                             <span>Penulis: {{ $berita->penulis }}</span>
                             <span class="hidden sm:inline">|</span>
                             <span>Tanggal: {{ $berita->published_at ? $berita->published_at->format('d M Y') : $berita->created_at->format('d M Y') }}</span>
@@ -29,12 +29,12 @@
                             </span>
                         </div>
 
-                        <h1 class="mt-4 text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
+                        <h1 class="mt-3 sm:mt-4 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight break-words leading-tight">
                             {{ $berita->judul }}
                         </h1>
 
-                        <div class="mt-6 flex items-center space-x-3">
-                            <span class="text-sm font-medium text-gray-600">Bagikan:</span>
+                        <div class="mt-4 sm:mt-6 flex items-center space-x-3">
+                            <span class="text-xs sm:text-sm font-medium text-gray-600">Bagikan:</span>
                             <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(request()->url()) }}" target="_blank" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg">
                                 <span class="sr-only">Facebook</span>
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -51,52 +51,54 @@
                     </div>
 
                     @if($berita->gambar)
-                        <img class="w-full rounded-lg shadow-md mb-8" src="{{ asset('storage/' . $berita->gambar) }}" alt="{{ $berita->judul }}">
+                        <div class="w-full bg-gray-50 rounded-lg shadow-md mb-6 sm:mb-8 overflow-hidden h-64 sm:h-80 md:h-96 lg:h-[500px]">
+                            <img class="w-full h-full object-contain" src="{{ asset('storage/' . $berita->gambar) }}" alt="{{ $berita->judul }}">
+                        </div>
                     @endif
 
-                    <div class="prose prose-lg prose-orange max-w-none select-none" oncontextmenu="return false;" oncopy="return false;" oncut="return false;">
-                        {!! $berita->konten !!}
+                    <div class="prose prose-sm sm:prose-base lg:prose-lg prose-orange max-w-none select-none" oncontextmenu="return false;" oncopy="return false;" oncut="return false;">
+                        {!! clean($berita->konten) !!}
                     </div>
 
-                    <div class="mt-12 pt-8 border-t border-gray-200">
-                        <a href="{{ route('berita.index') }}" class="inline-flex items-center text-orange-600 hover:text-orange-800 font-semibold transition">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    <div class="mt-8 sm:mt-10 md:mt-12 pt-6 sm:pt-8 border-t border-gray-200">
+                        <a href="{{ route('berita.index') }}" class="inline-flex items-center text-sm sm:text-base text-orange-600 hover:text-orange-800 font-semibold transition">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                             Kembali ke Semua Berita
                         </a>
                     </div>
                 </div>
 
 
-                <div class="lg:col-span-1 mt-16 lg:mt-0">
-                    <div class="sticky top-28">
-                        <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                <div class="lg:col-span-1 mt-12 sm:mt-14 lg:mt-0">
+                    <div class="lg:sticky lg:top-24">
+                        <h3 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 flex items-center">
                             {{-- Tambahkan SVG di sini --}}
-                            <svg class="w-6 h-6 mr-3 text-orange-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-orange-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
                             </svg>
                             Berita Lainnya
                         </h3>
-                        <div class="space-y-6">
+                        <div class="space-y-4 sm:space-y-6">
                             @forelse($relatedBeritas as $related)
-                                <a href="{{ route('berita.show', $related->slug) }}" class="group flex items-center space-x-4">
-                                    <div class="w-24 h-24 flex-shrink-0">
+                                <a href="{{ route('berita.show', $related->slug) }}" class="group flex items-center space-x-3 sm:space-x-4">
+                                    <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 bg-gray-50 rounded-lg flex items-center justify-center p-2">
                                         @if($related->gambar)
-                                            <img src="{{ asset('storage/' . $related->gambar) }}" alt="{{ $related->judul }}" class="w-full h-full rounded-lg object-cover">
+                                            <img src="{{ asset('storage/' . $related->gambar) }}" alt="{{ $related->judul }}" class="max-w-full max-h-full rounded object-contain">
                                         @else
-                                            <img src="{{ asset('images/air.webp') }}" alt="{{ $related->judul }}" class="w-full h-full rounded-lg object-cover">
+                                            <img src="{{ asset('images/air.webp') }}" alt="{{ $related->judul }}" class="max-w-full max-h-full rounded object-contain">
                                         @endif
                                     </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">{{ $related->published_at ? $related->published_at->format('d M Y') : $related->created_at->format('d M Y') }}</p>
-                                        <p class="font-semibold text-gray-800 group-hover:text-orange-600 transition">{{ Str::limit($related->judul, 60) }}</p>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-xs sm:text-sm text-gray-500 mb-1">{{ $related->published_at ? $related->published_at->format('d M Y') : $related->created_at->format('d M Y') }}</p>
+                                        <p class="text-sm sm:text-base font-semibold text-gray-800 group-hover:text-orange-600 transition break-words leading-tight">{{ Str::limit($related->judul, 60) }}</p>
                                     </div>
                                 </a>
                             @empty
-                                <p class="text-gray-500 text-sm">Belum ada berita lainnya.</p>
+                                <p class="text-gray-500 text-xs sm:text-sm">Belum ada berita lainnya.</p>
                             @endforelse
                         </div>
-                        <div class="mt-8">
-                            <a href="{{ route('berita.index') }}" class="inline-flex items-center font-semibold text-orange-600 hover:text-orange-800 transition">
+                        <div class="mt-6 sm:mt-8">
+                            <a href="{{ route('berita.index') }}" class="inline-flex items-center text-sm sm:text-base font-semibold text-orange-600 hover:text-orange-800 transition">
                                 Lihat Semua Berita
                                 <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                             </a>

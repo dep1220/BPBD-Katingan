@@ -49,7 +49,10 @@ $iconSize = $iconSizes[$size] ?? $iconSizes['md'];
     @endif
 
     @if($deleteUrl)
-        <div x-data="{ showConfirm: false }" @keydown.escape.window="showConfirm = false" class="inline">
+        <div x-data="{ showConfirm: false }" 
+             @keydown.escape.window="showConfirm = false"
+             @keydown.enter.window="if(showConfirm) { $event.preventDefault(); $event.stopPropagation(); $refs.confirmBtn.click(); }"
+             class="inline">
             <button type="button" 
                     @click="showConfirm = true"
                     class="inline-flex items-center {{ $baseClasses }} bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors duration-200"
@@ -127,6 +130,7 @@ $iconSize = $iconSizes[$size] ?? $iconSizes['md'];
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" 
+                                        x-ref="confirmBtn"
                                         class="w-full inline-flex justify-center items-center rounded-lg px-5 py-2.5 text-sm font-semibold text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-all duration-200 shadow-lg hover:shadow-orange-500/50">
                                     Oke
                                 </button>

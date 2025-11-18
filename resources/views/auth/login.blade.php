@@ -1,6 +1,7 @@
 <x-guest-layout>
     <div class="flex flex-wrap w-full h-screen">
-        <div class="w-full md:w-1/2 h-64 md:h-full flex flex-col bg-cover bg-center" style="background-image: url('{{ asset('images/bpbd-foto-bersama.jpg') }}')">
+        <!-- <div class="w-full md:w-1/2 h-64 md:h-full flex flex-col bg-cover bg-center" style="background-image: url('{{ asset('images/bpbd-foto-bersama.jpg') }}')"> -->
+        <div class="w-full md:w-1/2 h-64 md:h-full flex flex-col bg-cover bg-center" style="--bg-url: url('{{ asset('images/bpbd-foto-bersama.jpg') }}'); background-image: var(--bg-url);">
             {{-- Ganti URL dengan gambar yang relevan untuk BPBD --}}
             <div class="flex flex-col justify-between h-full p-8 bg-black bg-opacity-30">
                 <div class="flex items-center">

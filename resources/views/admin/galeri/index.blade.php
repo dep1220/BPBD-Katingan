@@ -11,7 +11,9 @@
              activeIndex: 0,
              photos: {{ json_encode($galeris->map(function($galeri) {
                  return [
-                     'src' => asset('storage/' . $galeri->gambar),
+                     'type' => $galeri->tipe,
+                     'src' => $galeri->tipe === 'gambar' ? asset('storage/' . $galeri->gambar) : '',
+                     'embedUrl' => $galeri->tipe === 'video' ? $galeri->youtube_embed_url : '',
                      'alt' => $galeri->judul
                  ];
              })) }},
@@ -54,9 +56,14 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" x-data="{ deleteId: null }">
                 @forelse ($galeris as $index => $galeri)
                     <div class="relative group bg-white rounded-lg shadow-md overflow-hidden">
-                        <span @class(['absolute top-2 left-2 px-2 py-1 text-xs font-semibold rounded-full z-10', 'bg-green-100 text-green-800' => $galeri->is_active, 'bg-red-100 text-red-800' => !$galeri->is_active])>
-                            {{ $galeri->is_active ? 'Aktif' : 'Non-Aktif' }}
-                        </span>
+                        <div class="absolute top-2 left-2 z-10 flex gap-2">
+                            <span @class(['px-2 py-1 text-xs font-semibold rounded-full', 'bg-green-100 text-green-800' => $galeri->is_active, 'bg-red-100 text-red-800' => !$galeri->is_active])>
+                                {{ $galeri->is_active ? 'Aktif' : 'Non-Aktif' }}
+                            </span>
+                            <span @class(['px-2 py-1 text-xs font-semibold rounded-full', 'bg-blue-100 text-blue-800' => $galeri->tipe === 'gambar', 'bg-red-100 text-red-800' => $galeri->tipe === 'video'])>
+                                {{ $galeri->tipe === 'gambar' ? '📷 Gambar' : '🎥 Video' }}
+                            </span>
+                        </div>
 
                         <div x-data="{ open: false }" class="absolute top-2 right-2 z-10">
                             <button @click="open = !open" class="p-1 bg-white/70 rounded-full hover:bg-white transition">
@@ -77,8 +84,23 @@
                             </div>
                         </div>
 
-                        <button @click="activeIndex = {{ $index }}; isOpen = true" class="w-full">
-                            <img src="{{ asset('storage/' . $galeri->gambar) }}" alt="{{ $galeri->judul }}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <button @click="activeIndex = {{ $index }}; isOpen = true" class="w-full relative">
+                            @if($galeri->tipe === 'gambar')
+                                <img src="{{ asset('storage/' . $galeri->gambar) }}" alt="{{ $galeri->judul }}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                            @else
+                                <div class="relative w-full h-48 bg-gray-900">
+                                    <img src="https://img.youtube.com/vi/{{ preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^&?\/ ]{11})/', $galeri->video_url, $matches) ? $matches[1] : '' }}/maxresdefault.jpg" 
+                                         alt="{{ $galeri->judul }}" 
+                                         class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <div class="bg-red-600 rounded-full p-4 group-hover:scale-110 transition-transform">
+                                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </button>
 
                         <div class="p-4">
@@ -187,7 +209,31 @@
             <button @click="prev()" class="absolute left-4 p-2 text-white bg-black bg-opacity-50 rounded-full hover:bg-opacity-75 z-50"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
             <button @click="next()" class="absolute right-4 p-2 text-white bg-black bg-opacity-50 rounded-full hover:bg-opacity-75 z-50"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></button>
             <div class="relative w-full h-full p-8 md:p-16 flex flex-col items-center justify-center text-center">
-                <img :src="photos[activeIndex]?.src" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl">
+                <template x-if="photos[activeIndex]?.type === 'video'">
+                    <div class="w-full max-w-4xl">
+                        <iframe 
+                            :src="photos[activeIndex]?.embedUrl"
+                            class="w-full aspect-video rounded-lg shadow-2xl"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen>
+                        </iframe>
+                        <div class="mt-4 text-center">
+                            <a :href="'https://www.youtube.com/watch?v=' + photos[activeIndex]?.embedUrl.match(/embed\/([^?]+)/)?.[1]" 
+                               target="_blank" 
+                               class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                                </svg>
+                                Tonton di YouTube
+                            </a>
+                        </div>
+                    </div>
+                </template>
+                <template x-if="photos[activeIndex]?.type === 'gambar'">
+                    <img :src="photos[activeIndex]?.src" class="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl">
+                </template>
                 <p x-text="photos[activeIndex]?.alt" class="mt-4 text-lg text-gray-200" x-transition></p>
             </div>
         </div>

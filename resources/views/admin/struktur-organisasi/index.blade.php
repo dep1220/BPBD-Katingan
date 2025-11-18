@@ -65,8 +65,13 @@
                                             {{ $struktur->nip ?? '-' }}
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-900">
-                                            <div class="max-w-xs truncate" title="{{ $struktur->jabatan }}">
-                                                {{ Str::limit($struktur->jabatan, 50) }}
+                                            <div class="flex items-center space-x-2">
+                                                @if($struktur->is_ketua)
+                                                    <span class="text-lg" title="Ketua/Kepala">👑</span>
+                                                @endif
+                                                <div class="max-w-xs truncate" title="{{ $struktur->jabatan }}">
+                                                    {{ Str::limit($struktur->jabatan, 50) }}
+                                                </div>
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">

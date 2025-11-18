@@ -23,6 +23,7 @@ class InformasiKontakController extends Controller
     {
         $validated = $request->validate([
             'alamat' => 'required|string|max:255',
+            'maps_url' => 'nullable|string|max:2000',
             'telepon' => 'required|string|max:20',
             'email' => 'required|email|max:255',
             'jam_operasional' => 'nullable|array',
@@ -32,6 +33,7 @@ class InformasiKontakController extends Controller
             'twitter' => 'nullable|url|max:255',
             'youtube' => 'nullable|url|max:255',
             'whatsapp' => 'nullable|string|max:20',
+            'footer_text' => 'nullable|string|max:500',
         ]);
 
         // Filter empty values and convert to JSON
@@ -54,6 +56,7 @@ class InformasiKontakController extends Controller
     {
         $validated = $request->validate([
             'alamat' => 'required|string|max:255',
+            'maps_url' => 'nullable|string|max:2000',
             'telepon' => 'required|string|max:20',
             'email' => 'required|email|max:255',
             'jam_operasional' => 'nullable|array',
@@ -63,6 +66,7 @@ class InformasiKontakController extends Controller
             'twitter' => 'nullable|url|max:255',
             'youtube' => 'nullable|url|max:255',
             'whatsapp' => 'nullable|string|max:20',
+            'footer_text' => 'nullable|string|max:500',
         ]);
 
         // Filter empty values and convert to JSON

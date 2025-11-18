@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Agenda;
+use App\Traits\LogsActivity;
 use Illuminate\Http\Request;
 
 class AgendaController extends Controller
 {
+    use LogsActivity;
     public function index()
     {
         $agendas = Agenda::orderBy('start_date', 'desc')->orderBy('sequence')->get();
@@ -36,7 +38,10 @@ class AgendaController extends Controller
         $data = $request->all();
         $data['is_active'] = true;
 
-        Agenda::create($data);
+        $agenda = Agenda::create($data);
+        
+        // Log activity
+        $this->logCreate('Agenda', $agenda->title);
 
         return redirect()->route('admin.agendas.index')
             ->with('success', 'Agenda berhasil ditambahkan.');
@@ -70,6 +75,9 @@ class AgendaController extends Controller
         $data['is_active'] = true;
 
         $agenda->update($data);
+        
+        // Log activity
+        $this->logUpdate('Agenda', $agenda->title);
 
         return redirect()->route('admin.agendas.index')
             ->with('success', 'Agenda berhasil diperbarui.');
@@ -77,7 +85,12 @@ class AgendaController extends Controller
 
     public function destroy(Agenda $agenda)
     {
+        $titleAgenda = $agenda->title;
+        
         $agenda->delete();
+        
+        // Log activity
+        $this->logDelete('Agenda', $titleAgenda);
 
         return redirect()->route('admin.agendas.index')
             ->with('success', 'Agenda berhasil dihapus.');

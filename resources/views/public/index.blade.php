@@ -21,23 +21,23 @@
 
                         <!-- Konten text di bawah tengah -->
                         <div
-                            class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl px-4 sm:px-6 lg:px-8 py-12 md:py-20 text-center pointer-events-none">
+                            class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-20 text-center pointer-events-none">
                             <template x-if="slide.link">
                                 <a :href="slide.link" class="block pointer-events-auto">
                                     <h1 x-text="slide.title"
-                                        class="text-3xl md:text-4xl font-extrabold tracking-tight text-white drop-shadow-2xl">
+                                        class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white drop-shadow-2xl leading-tight">
                                     </h1>
                                     <p x-text="slide.subtitle"
-                                        class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-gray-100 drop-shadow-xl"></p>
+                                        class="mt-3 sm:mt-4 max-w-2xl mx-auto text-sm sm:text-base md:text-lg lg:text-xl text-gray-100 drop-shadow-xl leading-relaxed"></p>
                                 </a>
                             </template>
                             <template x-if="!slide.link">
                                 <div class="text-center">
                                     <h1 x-text="slide.title"
-                                        class="text-3xl md:text-4xl font-extrabold tracking-tight text-white drop-shadow-2xl">
+                                        class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white drop-shadow-2xl leading-tight">
                                     </h1>
                                     <p x-text="slide.subtitle"
-                                        class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-gray-100 drop-shadow-xl"></p>
+                                        class="mt-3 sm:mt-4 max-w-2xl mx-auto text-sm sm:text-base md:text-lg lg:text-xl text-gray-100 drop-shadow-xl leading-relaxed"></p>
                                 </div>
                             </template>
                         </div>
@@ -61,8 +61,8 @@
     <section class="bg-white py-16 sm:py-24">
         <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Panduan Kesiapsiagaan Bencana</h2>
-                <p class="mt-4 text-lg text-gray-600">Langkah-langkah penting untuk melindungi diri Anda dan keluarga.</p>
+                <h2 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl md:text-4xl">Panduan Kesiapsiagaan Bencana</h2>
+                <p class="mt-4 text-base sm:text-lg text-gray-600">Langkah-langkah penting untuk melindungi diri Anda dan keluarga.</p>
             </div>
             <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
                 @if ($panduanBencana->isNotEmpty())
@@ -99,9 +99,9 @@
                                             d="{{ $icon }}"></path>
                                     </svg>
                                 </div>
-                                <h3 class="text-xl font-bold text-gray-900">{{ $panduan->title }}</h3>
+                                <h3 class="text-lg sm:text-xl font-bold text-gray-900">{{ $panduan->title }}</h3>
                             </div>
-                            <p class="mt-5 text-gray-600">{{ $panduan->description }}</p>
+                            <p class="mt-5 text-sm sm:text-base text-gray-600">{{ $panduan->description }}</p>
                             @if ($panduan->items && count($panduan->items) > 0)
                                 <ul class="mt-4 space-y-2">
                                     @foreach ($panduan->items as $item)
@@ -125,8 +125,8 @@
                                     d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-3 text-center">Panduan Sedang Diperbarui</h3>
-                        <p class="text-gray-600 text-center max-w-md">
+                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 text-center">Panduan Sedang Diperbarui</h3>
+                        <p class="text-sm sm:text-base text-gray-600 text-center max-w-md">
                             Kami sedang memperbarui panduan kesiapsiagaan bencana untuk memberikan informasi yang lebih
                             lengkap dan terkini. Silakan kembali lagi nanti.
                         </p>
@@ -141,8 +141,8 @@
         <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="lg:grid lg:grid-cols-5 lg:gap-12">
                 <div class="lg:col-span-2">
-                    <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Agenda Kegiatan</h2>
-                    <p class="mt-4 text-lg text-gray-600">Jadwal kegiatan dan program kerja BPBD Kabupaten Katingan yang
+                    <h2 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl md:text-4xl">Agenda Kegiatan</h2>
+                    <p class="mt-4 text-base sm:text-lg text-gray-600">Jadwal kegiatan dan program kerja BPBD Kabupaten Katingan yang
                         akan datang.</p>
                     <div class="mt-6">
                         <a href="{{ route('public.agenda.index') }}"
@@ -166,13 +166,13 @@
                                     </div>
                                     <div class="flex-1">
                                         <div class="flex items-start justify-between">
-                                            <h3 class="text-lg font-semibold text-gray-900">{{ $agenda->title }}</h3>
+                                            <h3 class="text-base sm:text-lg font-semibold text-gray-900">{{ $agenda->title }}</h3>
                                             <span
                                                 class="ml-2 px-2 py-1 text-xs font-medium rounded-full {{ $agenda->status_color }}">
                                                 {{ $agenda->status_label }}
                                             </span>
                                         </div>
-                                        <p class="mt-1 text-gray-600">{{ Str::limit($agenda->description, 100) }}</p>
+                                        <p class="mt-1 text-sm sm:text-base text-gray-600">{{ Str::limit($agenda->description, 100) }}</p>
                                         <div
                                             class="mt-3 flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0 text-sm text-gray-500">
                                             <p class="flex items-center">
@@ -210,8 +210,8 @@
                                         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                             </div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-3 text-center">Belum Ada Agenda Terjadwal</h3>
-                            <p class="text-gray-600 text-center max-w-md">
+                            <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-3 text-center">Belum Ada Agenda Terjadwal</h3>
+                            <p class="text-sm sm:text-base text-gray-600 text-center max-w-md">
                                 Saat ini belum ada agenda kegiatan yang terjadwal. Pantau terus website ini untuk informasi
                                 agenda terbaru.
                             </p>
@@ -226,8 +226,8 @@
     <section class="bg-gray-50 py-16 sm:py-24">
         <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Berita & Informasi</h2>
-                <p class="mt-4 text-lg text-gray-600">Ikuti perkembangan dan kegiatan terbaru dari kami.</p>
+                <h2 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl md:text-4xl">Berita & Informasi</h2>
+                <p class="mt-4 text-base sm:text-lg text-gray-600">Ikuti perkembangan dan kegiatan terbaru dari kami.</p>
             </div>
             <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @if (isset($beritas) && $beritas->isNotEmpty())
@@ -251,10 +251,10 @@
                                     </span>
                                     <a href="{{ route('berita.show', $berita->slug) }}" class="mt-2 block">
                                         <p
-                                            class="text-xl font-semibold text-orange-600 transition-colors duration-300 group-hover:text-orange-800">
+                                            class="text-lg sm:text-xl font-semibold text-orange-600 transition-colors duration-300 group-hover:text-orange-800 break-words">
                                             {{ Str::limit($berita->judul, 60) }}
                                         </p>
-                                        <p class="mt-3 text-base text-gray-500">{{ $berita->excerpt }}</p>
+                                        <p class="mt-3 text-sm sm:text-base text-gray-500 break-words">{{ $berita->excerpt }}</p>
                                     </a>
                                 </div>
                                 <div class="mt-6 flex items-center justify-between">
@@ -279,8 +279,8 @@
                                 </path>
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-3 text-center">Berita Sedang Dipersiapkan</h3>
-                        <p class="text-gray-600 text-center max-w-md">
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-3 text-center">Berita Sedang Dipersiapkan</h3>
+                        <p class="text-sm sm:text-base text-gray-600 text-center max-w-md">
                             Kami sedang mempersiapkan berita dan informasi terbaru untuk Anda. Silakan kembali lagi nanti.
                         </p>
                     </div>
@@ -318,17 +318,17 @@
                     <div class="md:col-span-2">
                         <h2 class="text-base font-semibold leading-7 text-orange-600">Sambutan Kepala Dinas</h2>
                         @if ($kepalaDinas->sambutan_judul)
-                            <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                            <p class="mt-2 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl md:text-4xl">
                                 {{ $kepalaDinas->sambutan_judul }}
                             </p>
                         @else
-                            <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                            <p class="mt-2 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl md:text-4xl">
                                 Bersama Membangun Ketangguhan
                             </p>
                         @endif
                         @if ($kepalaDinas->sambutan_kepala)
                             <blockquote class="mt-6 border-l-4 border-orange-500 pl-6 text-gray-600 italic">
-                                {!! $kepalaDinas->sambutan_kepala !!}
+                                {!! clean($kepalaDinas->sambutan_kepala) !!}
                             </blockquote>
                         @else
                             <blockquote class="mt-6 border-l-4 border-orange-500 pl-6 text-gray-600 italic">
@@ -354,21 +354,47 @@
     <section class="bg-white py-16 sm:py-24">
         <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Galeri & Unduhan</h2>
-                <p class="mt-4 text-lg text-gray-600">Dokumentasi kegiatan dan dokumen publik yang dapat diakses.</p>
+                <h2 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl md:text-4xl">Galeri & Unduhan</h2>
+                <p class="mt-4 text-base sm:text-lg text-gray-600">Dokumentasi kegiatan dan dokumen publik yang dapat diakses.</p>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
 
-                <!-- Galeri Foto -->
+                <!-- Galeri Foto & Video -->
                 <div class="flex flex-col">
-                    <h3 class="text-2xl font-semibold text-gray-900">Galeri Foto Terbaru</h3>
+                    <h3 class="text-xl sm:text-2xl font-semibold text-gray-900">Galeri Terbaru</h3>
                     <div class="mt-6 grid grid-cols-2 gap-4 flex-grow">
                         @if (isset($galeris) && $galeris->count() > 0)
                             @foreach ($galeris as $galeri)
-                                <div class="group block overflow-hidden rounded-lg">
-                                    <img src="{{ Storage::url($galeri->gambar) }}" alt="{{ $galeri->judul }}"
-                                        class="w-full h-full aspect-square object-cover transition duration-300 group-hover:scale-110 group-hover:opacity-80">
-                                </div>
+                                @if ($galeri->tipe === 'video')
+                                    {{-- Video Item --}}
+                                    @php
+                                        preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/', $galeri->video_url, $matches);
+                                        $videoId = $matches[1] ?? null;
+                                    @endphp
+                                    @if($videoId)
+                                        <div class="group block overflow-hidden rounded-lg cursor-pointer relative" 
+                                             onclick="openGaleriModal('{{ $galeri->youtube_embed_url }}', '{{ addslashes($galeri->judul) }}', 'video', '{{ $galeri->video_url }}')">
+                                            <img src="https://img.youtube.com/vi/{{ $videoId }}/maxresdefault.jpg" 
+                                                 alt="{{ $galeri->judul }}"
+                                                 class="w-full h-full aspect-square object-cover transition duration-300 group-hover:scale-110 group-hover:opacity-80">
+                                            {{-- Play Button Overlay --}}
+                                            <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 transition-opacity duration-300 group-hover:bg-opacity-50">
+                                                <div class="bg-red-600 rounded-full p-3 transform transition-transform duration-300 group-hover:scale-110">
+                                                    <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                                        <path d="M8 5v14l11-7z"/>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @else
+                                    {{-- Image Item --}}
+                                    <div class="group block overflow-hidden rounded-lg cursor-pointer" 
+                                         onclick="openGaleriModal('{{ Storage::url($galeri->gambar) }}', '{{ addslashes($galeri->judul) }}', 'gambar', null)">
+                                        <img src="{{ Storage::url($galeri->gambar) }}" alt="{{ $galeri->judul }}"
+                                            class="w-full h-full aspect-square object-cover transition duration-300 group-hover:scale-110 group-hover:opacity-80">
+                                    </div>
+                                @endif
                             @endforeach
                         @else
                             <div class="col-span-2 text-center py-8">
@@ -383,13 +409,13 @@
                     </div>
                     <div class="mt-6 text-center">
                         <a href="{{ route('galeri.index') }}"
-                            class="font-semibold text-orange-600 hover:text-orange-500">Lihat Semua Foto &rarr;</a>
+                            class="font-semibold text-orange-600 hover:text-orange-500">Lihat Semua Galeri &rarr;</a>
                     </div>
                 </div>
 
                 <!-- Dokumen Publik -->
                 <div>
-                    <h3 class="text-2xl font-semibold text-gray-900">Dokumen Publik</h3>
+                    <h3 class="text-xl sm:text-2xl font-semibold text-gray-900">Dokumen Publik</h3>
                     <div class="mt-6 space-y-4">
                         @if (isset($unduhans) && $unduhans->count() > 0)
                             @foreach ($unduhans as $unduhan)
@@ -405,8 +431,8 @@
                                             </svg>
                                         </div>
                                         <div class="flex-grow">
-                                            <p class="font-semibold text-gray-800">{{ $unduhan->title }}</p>
-                                            <p class="text-sm text-gray-500">Tipe: {{ $unduhan->type }} | Ukuran:
+                                            <p class="text-sm sm:text-base font-semibold text-gray-800">{{ $unduhan->title }}</p>
+                                            <p class="text-xs sm:text-sm text-gray-500">Tipe: {{ $unduhan->type }} | Ukuran:
                                                 {{ $unduhan->file_size }}</p>
                                         </div>
                                         <div class="flex-shrink-0 hidden sm:block">
@@ -438,4 +464,96 @@
             </div>
         </div>
     </section>
+
+    {{-- Modal Galeri --}}
+    <div id="galeriModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black bg-opacity-90" onclick="closeGaleriModal()">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="relative max-w-5xl w-full" onclick="event.stopPropagation()">
+                {{-- Close Button --}}
+                <button onclick="closeGaleriModal()" class="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+
+                {{-- Modal Content --}}
+                <div id="galeriModalContent" class="bg-white rounded-lg overflow-hidden">
+                    {{-- Content will be injected by JavaScript --}}
+                </div>
+
+                {{-- Title --}}
+                <div id="galeriModalTitle" class="mt-4 text-center text-white text-lg font-semibold"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openGaleriModal(src, title, type, originalUrl) {
+            const modal = document.getElementById('galeriModal');
+            const content = document.getElementById('galeriModalContent');
+            const titleEl = document.getElementById('galeriModalTitle');
+            
+            if (!modal || !content || !titleEl) {
+                return;
+            }
+            
+            if (type === 'video') {
+                // Video content with fallback - add loading parameter to reduce tracking
+                const embedUrl = src + (src.includes('?') ? '&' : '?') + 'rel=0&modestbranding=1';
+                content.innerHTML = `
+                    <div class="relative bg-black" style="padding-top: 56.25%;">
+                        <iframe 
+                            src="${embedUrl}" 
+                            class="absolute top-0 left-0 w-full h-full"
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen
+                            loading="lazy"
+                            onerror="this.style.display='none'; document.getElementById('videoFallback').style.display='flex';">
+                        </iframe>
+                        <div id="videoFallback" class="absolute inset-0 hidden items-center justify-center bg-gray-900 p-8">
+                            <div class="text-center">
+                                <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                </svg>
+                                <p class="text-white text-lg mb-4">Video tidak dapat ditampilkan di sini</p>
+                                <p class="text-gray-400 text-sm mb-6">Video ini mungkin memiliki pembatasan embed</p>
+                                <a href="${originalUrl || src}" target="_blank" class="inline-flex items-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors">
+                                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                    </svg>
+                                    Tonton di YouTube
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Image content
+                content.innerHTML = `<img src="${src}" alt="${title}" class="w-full h-auto">`;
+            }
+            
+            titleEl.textContent = title;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeGaleriModal() {
+            const modal = document.getElementById('galeriModal');
+            const content = document.getElementById('galeriModalContent');
+            
+            if (modal && content) {
+                modal.classList.add('hidden');
+                content.innerHTML = '';
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeGaleriModal();
+            }
+        });
+    </script>
 @endsection

@@ -97,6 +97,14 @@ Route::middleware('auth')->group(function () {
         Route::middleware('super_admin')->group(function () {
             Route::resource('users', \App\Http\Controllers\Admin\UserManagementController::class);
         });
+
+        // Routes untuk Activity Log Management
+        Route::prefix('activity-logs')->name('activity-logs.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('index');
+            Route::post('/clean-old', [\App\Http\Controllers\Admin\ActivityLogController::class, 'cleanOld'])->name('clean-old');
+            Route::delete('/delete-all', [\App\Http\Controllers\Admin\ActivityLogController::class, 'deleteAll'])->name('delete-all');
+            Route::delete('/{activityLog}', [\App\Http\Controllers\Admin\ActivityLogController::class, 'destroy'])->name('destroy');
+        });
     });
 });
 

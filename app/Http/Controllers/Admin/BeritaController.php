@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Berita;
 use App\Enums\KategoriBerita;
+use App\Traits\LogsActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -15,6 +16,8 @@ use Smalot\PdfParser\Parser;
 
 class BeritaController extends Controller
 {
+    use LogsActivity;
+
     public function index(Request $request)
     {
         // Ambil opsi kategori untuk dropdown filter - hanya ambil label saja
@@ -97,7 +100,10 @@ class BeritaController extends Controller
             $data['gambar'] = $imagePath;
         }
 
-        Berita::create($data);
+        $berita = Berita::create($data);
+        
+        // Log activity
+        $this->logCreate('Berita', $berita->judul);
 
         return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil ditambahkan.');
     }
@@ -157,18 +163,26 @@ class BeritaController extends Controller
         }
 
         $berita->update($data);
+        
+        // Log activity
+        $this->logUpdate('Berita', $berita->judul);
 
         return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil diperbarui.');
     }
 
     public function destroy(Berita $berita)
     {
+        $judulBerita = $berita->judul;
+        
         // Delete image if exists
         if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
             Storage::disk('public')->delete($berita->gambar);
         }
 
         $berita->delete();
+        
+        // Log activity
+        $this->logDelete('Berita', $judulBerita);
 
         return redirect()->route('admin.berita.index')->with('success', 'Berita berhasil dihapus.');
     }

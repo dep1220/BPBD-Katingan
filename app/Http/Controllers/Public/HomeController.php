@@ -94,7 +94,7 @@ class HomeController extends Controller
 
         try {
             // Ambil data kepala dinas/kepala pelaksana untuk sambutan
-            $kepalaDinas = StrukturOrganisasi::kepala()
+            $kepalaDinas = StrukturOrganisasi::ketua()
                 ->active()
                 ->first();
         } catch (\Exception $e) {

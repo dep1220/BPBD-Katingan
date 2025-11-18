@@ -8,6 +8,7 @@ use App\Models\Berita;
 use App\Models\Galeri;
 use App\Models\Pesan;
 use App\Models\Unduhan;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -24,13 +25,20 @@ class DashboardController extends Controller
         // Data untuk Widget Berita Terbaru (ambil 5 terakhir)
         $latestBerita = Berita::latest()->take(5)->get();
 
+        // Data untuk Log Activity (ambil 10 terakhir)
+        $activityLogs = ActivityLog::with('user')
+            ->latest()
+            ->take(10)
+            ->get();
+
         return view('admin.dashboard', compact(
             'sliderCount',
             'beritaCount',
             'galeriCount',
             'unduhanCount',
             'pesanBaruCount',
-            'latestBerita'
+            'latestBerita',
+            'activityLogs'
         ));
     }
 }

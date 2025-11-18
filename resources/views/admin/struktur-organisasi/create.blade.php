@@ -33,59 +33,29 @@
                                                name="nip"
                                                value="{{ old('nip') }}"
                                                required
-                                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('nip') @enderror">
+                                               pattern="[0-9]*"
+                                               inputmode="numeric"
+                                               maxlength="20"
+                                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('nip') @enderror"
+                                               placeholder="Contoh: 199012312015011001">
                                         @error('nip')
                                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                         @enderror
+                                        <p class="mt-1 text-sm text-gray-500">Hanya angka, maksimal 20 digit</p>
                                     </div>
                                 </div>
 
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                                    <div>
-                                        <label for="jabatan" class="block text-sm font-medium text-gray-700">Jabatan <span class="text-red-500">*</span></label>
-                                        <input type="text"
-                                               id="jabatan"
-                                               name="jabatan"
-                                               value="{{ old('jabatan') }}"
-                                               required
-                                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('jabatan') @enderror">
-                                        @error('jabatan')
-                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-
-                                    <div>
-                                        <label for="tipe_jabatan" class="block text-sm font-medium text-gray-700">Tipe Jabatan <span class="text-red-500">*</span></label>
-                                        <select id="tipe_jabatan"
-                                                name="tipe_jabatan"
-                                                required
-                                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('tipe_jabatan') @enderror">
-                                            <option value="">Pilih Tipe Jabatan</option>
-                                            @foreach($tipeJabatanOptions as $value => $label)
-                                                <option value="{{ $value }}" {{ old('tipe_jabatan') == $value ? 'selected' : '' }}>{{ $label }}</option>
-                                            @endforeach
-                                            <option value="custom" {{ old('tipe_jabatan') == 'custom' ? 'selected' : '' }}>
-                                                ➕ Tipe Jabatan Custom
-                                            </option>
-                                        </select>
-                                        @error('tipe_jabatan')
-                                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                        @enderror
-
-                                        <!-- Custom Tipe Jabatan Input -->
-                                        <div id="custom-tipe-jabatan-input" style="display: none;" class="mt-2">
-                                            <input type="text"
-                                                   id="tipe_jabatan_custom"
-                                                   name="tipe_jabatan_custom"
-                                                   value="{{ old('tipe_jabatan_custom') }}"
-                                                   class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('tipe_jabatan_custom') @enderror"
-                                                   placeholder="Masukkan tipe jabatan custom"
-                                                   maxlength="100">
-                                            @error('tipe_jabatan_custom')
-                                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                            @enderror
-                                        </div>
-                                    </div>
+                                <div class="mt-4">
+                                    <label for="jabatan" class="block text-sm font-medium text-gray-700">Jabatan <span class="text-red-500">*</span></label>
+                                    <input type="text"
+                                           id="jabatan"
+                                           name="jabatan"
+                                           value="{{ old('jabatan') }}"
+                                           required
+                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 @error('jabatan') @enderror">
+                                    @error('jabatan')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -104,8 +74,18 @@
                                     </div>
 
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700">Status</label>
-                                        <div class="mt-2">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Status & Tipe</label>
+                                        <div class="space-y-2">
+                                            <label class="inline-flex items-center">
+                                                <input type="checkbox"
+                                                       id="is_ketua"
+                                                       name="is_ketua"
+                                                       value="1"
+                                                       {{ old('is_ketua') ? 'checked' : '' }}
+                                                       class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                                <span class="ml-2 text-sm text-gray-600">👑 Ketua/Kepala (Tampilkan Sambutan)</span>
+                                            </label>
+                                            <br>
                                             <label class="inline-flex items-center">
                                                 <input type="checkbox"
                                                        name="is_active"
@@ -181,47 +161,54 @@
     @push('scripts')
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const tipeJabatanSelect = document.getElementById('tipe_jabatan');
+        const isKetuaCheckbox = document.getElementById('is_ketua');
         const sambutanSection = document.getElementById('sambutan-section');
-        const customTipeJabatanInput = document.getElementById('custom-tipe-jabatan-input');
-        const tipeJabatanCustomField = document.getElementById('tipe_jabatan_custom');
+        const nipInput = document.getElementById('nip');
 
-        // Toggle Custom Tipe Jabatan Input
-        function toggleCustomTipeJabatanInput() {
-            if (tipeJabatanSelect.value === 'custom') {
-                customTipeJabatanInput.style.display = 'block';
-                tipeJabatanCustomField.required = true;
-            } else {
-                customTipeJabatanInput.style.display = 'none';
-                tipeJabatanCustomField.required = false;
-                tipeJabatanCustomField.value = '';
+        // NIP validation - only allow numbers
+        nipInput.addEventListener('input', function(e) {
+            // Remove any non-numeric characters
+            this.value = this.value.replace(/[^0-9]/g, '');
+            
+            // Limit to 20 digits
+            if (this.value.length > 20) {
+                this.value = this.value.slice(0, 20);
             }
-        }
+        });
 
-        // Show/hide sambutan section based on tipe_jabatan
+        // Prevent non-numeric key presses
+        nipInput.addEventListener('keypress', function(e) {
+            // Allow: backspace, delete, tab, escape, enter
+            if ([8, 9, 27, 13].indexOf(e.keyCode) !== -1 ||
+                // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                (e.keyCode === 65 && e.ctrlKey === true) ||
+                (e.keyCode === 67 && e.ctrlKey === true) ||
+                (e.keyCode === 86 && e.ctrlKey === true) ||
+                (e.keyCode === 88 && e.ctrlKey === true)) {
+                return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+
+        // Show/hide sambutan section based on is_ketua checkbox
         function toggleSambutanSection() {
-            const tipeJabatan = tipeJabatanSelect.value;
-
-            if (tipeJabatan === 'kepala') {
+            if (isKetuaCheckbox.checked) {
                 sambutanSection.style.display = 'block';
             } else {
                 sambutanSection.style.display = 'none';
                 document.getElementById('sambutan_kepala').value = '';
-                document.getElementById('sambutan_judul').value = '';
+                document.getElementById('sambutan_judul').value = 'Bersama Membangun Ketangguhan';
             }
         }
 
-        // Combined toggle function
-        function handleTipeJabatanChange() {
-            toggleCustomTipeJabatanInput();
-            toggleSambutanSection();
-        }
-
         // Initial check
-        handleTipeJabatanChange();
+        toggleSambutanSection();
 
         // Listen for changes
-        tipeJabatanSelect.addEventListener('change', handleTipeJabatanChange);
+        isKetuaCheckbox.addEventListener('change', toggleSambutanSection);
 
         // Preview foto
         document.getElementById('foto').addEventListener('change', function() {

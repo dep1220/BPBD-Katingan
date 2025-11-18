@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\StrukturOrganisasi;
-use App\Enums\TipeJabatan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -27,8 +26,7 @@ class StrukturOrganisasiController extends Controller
      */
     public function create()
     {
-        $tipeJabatanOptions = TipeJabatan::options();
-        return view('admin.struktur-organisasi.create', compact('tipeJabatanOptions'));
+        return view('admin.struktur-organisasi.create');
     }
 
     /**
@@ -36,52 +34,25 @@ class StrukturOrganisasiController extends Controller
      */
     public function store(Request $request)
     {
-        $tipeJabatanValues = collect(TipeJabatan::cases())->pluck('value')->implode(',');
-
-        // Validasi berbeda untuk tipe jabatan custom vs enum
-        $rules = [
+        $request->validate([
             'nama' => 'required|string|max:255',
-            'nip' => 'required|string|max:20',
+            'nip' => 'required|numeric|digits_between:1,20',
             'jabatan' => 'required|string|max:255',
-            'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'is_ketua' => 'boolean',
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'sambutan_kepala' => 'nullable|string',
             'sambutan_judul' => 'nullable|string|max:255',
             'urutan' => 'nullable|integer|min:0',
             'is_active' => 'boolean'
-        ];
-
-        // Jika bukan custom, validasi sebagai enum
-        if ($request->tipe_jabatan !== 'custom') {
-            $rules['tipe_jabatan'] = "required|in:{$tipeJabatanValues}";
-        } else {
-            // Jika custom, tipe_jabatan_custom wajib diisi
-            $rules['tipe_jabatan_custom'] = 'required|string|max:100';
-        }
-
-        $request->validate($rules, [
-            'nip.max' => 'NIP tidak boleh lebih dari 20 karakter, Kosong atau Huruf',
+        ], [
+            'nip.numeric' => 'NIP hanya boleh berisi angka.',
+            'nip.digits_between' => 'NIP harus terdiri dari 1-20 digit.',
             'nip.required' => 'NIP wajib diisi.',
         ]);
 
         $data = $request->except(['foto']);
-
-        // Jika user memilih "custom", gunakan tipe_jabatan_custom
-        if ($request->tipe_jabatan === 'custom' && !empty($request->tipe_jabatan_custom)) {
-            $data['tipe_jabatan'] = null; // Set enum ke null
-            // Auto-assign urutan default untuk custom
-            if (is_null($data['urutan']) || $data['urutan'] === '') {
-                $data['urutan'] = 999; // Urutan paling bawah untuk custom
-            }
-        } else {
-            // Jika menggunakan enum, hapus tipe_jabatan_custom
-            $data['tipe_jabatan_custom'] = null;
-            
-            // Auto-assign urutan based on tipe_jabatan if not provided
-            if (is_null($data['urutan']) || $data['urutan'] === '') {
-                $tipeJabatan = TipeJabatan::from($data['tipe_jabatan']);
-                $data['urutan'] = $tipeJabatan->urutan() * 10;
-            }
-        }
+        $data['is_ketua'] = $request->has('is_ketua');
+        $data['is_active'] = $request->has('is_active');
 
         // Handle file upload
         if ($request->hasFile('foto')) {
@@ -109,8 +80,7 @@ class StrukturOrganisasiController extends Controller
      */
     public function edit(StrukturOrganisasi $strukturOrganisasi)
     {
-        $tipeJabatanOptions = TipeJabatan::options();
-        return view('admin.struktur-organisasi.edit', compact('strukturOrganisasi', 'tipeJabatanOptions'));
+        return view('admin.struktur-organisasi.edit', compact('strukturOrganisasi'));
     }
 
     /**
@@ -118,42 +88,25 @@ class StrukturOrganisasiController extends Controller
      */
     public function update(Request $request, StrukturOrganisasi $strukturOrganisasi)
     {
-        $tipeJabatanValues = collect(TipeJabatan::cases())->pluck('value')->implode(',');
-
-        // Validasi berbeda untuk tipe jabatan custom vs enum
-        $rules = [
+        $request->validate([
             'nama' => 'required|string|max:255',
-            'nip' => 'required|string|max:20',
+            'nip' => 'required|numeric|digits_between:1,20',
             'jabatan' => 'required|string|max:255',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'is_ketua' => 'boolean',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'sambutan_kepala' => 'nullable|string',
             'sambutan_judul' => 'nullable|string|max:255',
             'urutan' => 'nullable|integer|min:0',
             'is_active' => 'boolean'
-        ];
-
-        // Jika bukan custom, validasi sebagai enum
-        if ($request->tipe_jabatan !== 'custom') {
-            $rules['tipe_jabatan'] = "required|in:{$tipeJabatanValues}";
-        } else {
-            // Jika custom, tipe_jabatan_custom wajib diisi
-            $rules['tipe_jabatan_custom'] = 'required|string|max:100';
-        }
-
-        $request->validate($rules, [
-            'nip.max' => 'NIP tidak boleh lebih dari 20 karakter, Kosong, atau Huruf',
+        ], [
+            'nip.numeric' => 'NIP hanya boleh berisi angka.',
+            'nip.digits_between' => 'NIP harus terdiri dari 1-20 digit.',
             'nip.required' => 'NIP wajib diisi.',
         ]);
 
         $data = $request->except(['foto']);
-
-        // Jika user memilih "custom", gunakan tipe_jabatan_custom
-        if ($request->tipe_jabatan === 'custom' && !empty($request->tipe_jabatan_custom)) {
-            $data['tipe_jabatan'] = null; // Set enum ke null
-        } else {
-            // Jika menggunakan enum, hapus tipe_jabatan_custom
-            $data['tipe_jabatan_custom'] = null;
-        }
+        $data['is_ketua'] = $request->has('is_ketua');
+        $data['is_active'] = $request->has('is_active');
 
         // Handle file upload
         if ($request->hasFile('foto')) {

@@ -6,6 +6,54 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Carbon\Carbon;
 
+/**
+ * @OA\Schema(
+ *     schema="Agenda",
+ *     type="object",
+ *     title="Agenda",
+ *     description="Model data Agenda Kegiatan",
+ *     @OA\Property(property="id", type="integer", example=1, description="ID agenda"),
+ *     @OA\Property(property="title", type="string", example="Rapat Koordinasi Kesiapsiagaan Bencana", description="Judul agenda"),
+ *     @OA\Property(property="description", type="string", example="Rapat koordinasi dengan stakeholder terkait", description="Deskripsi agenda"),
+ *     @OA\Property(property="location", type="string", example="Kantor BPBD Katingan", description="Lokasi kegiatan"),
+ *     @OA\Property(property="start_date", type="string", format="date", example="2025-01-20", description="Tanggal mulai"),
+ *     @OA\Property(property="end_date", type="string", format="date", example="2025-01-20", nullable=true, description="Tanggal selesai (opsional)"),
+ *     @OA\Property(property="start_time", type="string", format="time", example="09:00:00", description="Waktu mulai"),
+ *     @OA\Property(property="end_time", type="string", format="time", example="12:00:00", nullable=true, description="Waktu selesai (opsional)"),
+ *     @OA\Property(property="formatted_date", type="string", example="20", description="Tanggal terformat (hari)"),
+ *     @OA\Property(property="formatted_month", type="string", example="Jan", description="Bulan terformat"),
+ *     @OA\Property(property="formatted_time_range", type="string", example="09:00 WIB - 12:00 WIB", description="Range waktu terformat"),
+ *     @OA\Property(
+ *         property="status",
+ *         type="string",
+ *         example="akan_datang",
+ *         enum={"akan_datang", "sedang_berlangsung", "selesai"},
+ *         description="Status agenda otomatis"
+ *     ),
+ *     @OA\Property(property="status_label", type="string", example="Akan Datang", description="Label status"),
+ *     @OA\Property(property="sequence", type="integer", example=1, description="Urutan tampil agenda"),
+ *     @OA\Property(property="is_active", type="boolean", example=true, description="Status aktif agenda"),
+ *     @OA\Property(property="created_at", type="string", format="datetime", example="2025-01-15 10:30:00", description="Waktu dibuat"),
+ *     @OA\Property(property="updated_at", type="string", format="datetime", example="2025-01-15 10:30:00", description="Waktu diupdate")
+ * )
+ * 
+ * @OA\Schema(
+ *     schema="AgendaInput",
+ *     type="object",
+ *     title="Agenda Input",
+ *     description="Data input untuk create/update agenda",
+ *     required={"title", "description", "location", "start_date", "start_time"},
+ *     @OA\Property(property="title", type="string", example="Rapat Koordinasi", maxLength=255, description="Judul agenda (wajib)"),
+ *     @OA\Property(property="description", type="string", example="Deskripsi kegiatan", description="Deskripsi agenda (wajib)"),
+ *     @OA\Property(property="location", type="string", example="Kantor BPBD", maxLength=255, description="Lokasi kegiatan (wajib)"),
+ *     @OA\Property(property="start_date", type="string", format="date", example="2025-01-20", description="Tanggal mulai (wajib)"),
+ *     @OA\Property(property="end_date", type="string", format="date", example="2025-01-20", nullable=true, description="Tanggal selesai (opsional)"),
+ *     @OA\Property(property="start_time", type="string", format="time", example="09:00", description="Waktu mulai format HH:mm (wajib)"),
+ *     @OA\Property(property="end_time", type="string", format="time", example="12:00", nullable=true, description="Waktu selesai format HH:mm (opsional)"),
+ *     @OA\Property(property="sequence", type="integer", example=1, minimum=0, nullable=true, description="Urutan tampil (opsional, default: 0)"),
+ *     @OA\Property(property="is_active", type="boolean", example=true, nullable=true, description="Status aktif (opsional, default: true)")
+ * )
+ */
 class Agenda extends Model
 {
     use HasFactory;

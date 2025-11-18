@@ -1,0 +1,8 @@
+# Ignore security-sensitive documentation
+SECURITY_IMPLEMENTATION.md
+DEPLOYMENT_NOTES.md
+CREDENTIALS.md
+
+# Keep public documentation
+!API_DOCUMENTATION.md
+!README.md

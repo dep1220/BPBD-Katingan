@@ -43,14 +43,26 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700">Jabatan</label>
-                                        <p class="mt-1 text-sm text-gray-900">{{ $strukturOrganisasi->jabatan }}</p>
+                                        <p class="mt-1 text-sm text-gray-900">
+                                            @if($strukturOrganisasi->is_ketua)
+                                                <span class="mr-2" title="Ketua/Kepala">👑</span>
+                                            @endif
+                                            {{ $strukturOrganisasi->jabatan }}
+                                        </p>
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700">Tipe Jabatan</label>
-                                        <span class="mt-1 inline-flex px-2 py-1 text-xs leading-5 font-semibold rounded-full {{ $strukturOrganisasi->tipe_jabatan->tailwindColor() }}">
-                                            <i class="{{ $strukturOrganisasi->tipe_jabatan->icon() }} mr-1"></i>
-                                            {{ $strukturOrganisasi->tipe_jabatan->label() }}
-                                        </span>
+                                        <label class="block text-sm font-medium text-gray-700">Tipe</label>
+                                        @if($strukturOrganisasi->is_ketua)
+                                            <span class="mt-1 inline-flex px-3 py-1 text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                <i class="fas fa-crown mr-1"></i>
+                                                Ketua/Kepala
+                                            </span>
+                                        @else
+                                            <span class="mt-1 inline-flex px-3 py-1 text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                                <i class="fas fa-user mr-1"></i>
+                                                Anggota
+                                            </span>
+                                        @endif
                                     </div>
                                 </div>
 
@@ -82,11 +94,14 @@
                         </div>
                     </div>
 
-                    @if($strukturOrganisasi->sambutan_kepala && $strukturOrganisasi->tipe_jabatan->isKepala())
+                    @if($strukturOrganisasi->sambutan_kepala && $strukturOrganisasi->is_ketua)
                         <div class="mt-6">
                             <label class="block text-sm font-medium text-gray-700">Sambutan Kepala</label>
+                            @if($strukturOrganisasi->sambutan_judul)
+                                <h4 class="mt-2 text-lg font-semibold text-gray-900">{{ $strukturOrganisasi->sambutan_judul }}</h4>
+                            @endif
                             <div class="mt-2 p-4 bg-blue-50 rounded-lg">
-                                <div class="text-sm text-gray-900">{!! $strukturOrganisasi->sambutan_kepala !!}</div>
+                                <div class="text-sm text-gray-900">{!! nl2br(e($strukturOrganisasi->sambutan_kepala)) !!}</div>
                             </div>
                         </div>
                     @endif

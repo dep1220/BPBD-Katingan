@@ -23,12 +23,14 @@
                             </div>
                         @endif
 
-                        <div class="flex justify-end mb-6">
-                            <a href="{{ route('admin.visi-misi.create') }}"
-                               class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
-                                <i class="fas fa-plus"></i> Tambah Visi & Misi
-                            </a>
-                        </div>
+                        @if($visiMisi->isEmpty())
+                            <div class="flex justify-end mb-6">
+                                <a href="{{ route('admin.visi-misi.create') }}"
+                                   class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
+                                    <i class="fas fa-plus"></i> Tambah Visi & Misi
+                                </a>
+                            </div>
+                        @endif
 
                         <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                             <div class="flex items-center">

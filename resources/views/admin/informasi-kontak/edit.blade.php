@@ -32,6 +32,21 @@
                                     @enderror
                                 </div>
 
+                                <div class="md:col-span-2">
+                                    <label for="maps_url" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Link Koordinat Peta (Google Maps)
+                                        <span class="text-gray-500 text-xs font-normal">- Opsional</span>
+                                    </label>
+                                    <textarea id="maps_url" name="maps_url" rows="3" class="w-full rounded-lg focus:border-orange-500 focus:ring-orange-500 @error('maps_url') border-red-500 @enderror font-mono text-sm" placeholder="Link atau kode embed peta">{{ old('maps_url', $informasiKontak->maps_url) }}</textarea>
+                                    <p class="mt-1 text-xs text-gray-500">
+                                        <strong>Cara 1 - Salin Link:</strong> Buka Google Maps → Klik "Bagikan" → Salin link (contoh: https://maps.app.goo.gl/xxx)<br>
+                                        <strong>Cara 2 - Sematkan Peta:</strong> Buka Google Maps → Klik "Bagikan" → Tab "Sematkan peta" → Salin kode iframe lengkap
+                                    </p>
+                                    @error('maps_url')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
                                 <div>
                                     <label for="telepon" class="block text-sm font-medium text-gray-700 mb-2">Telepon <span class="text-red-500">*</span></label>
                                     <input type="text" id="telepon" name="telepon" required value="{{ old('telepon', $informasiKontak->telepon) }}" class="w-full rounded-lg border-gray-300 focus:border-orange-500 focus:ring-orange-500 @error('telepon') @enderror" placeholder="0123-4567890">
@@ -133,6 +148,28 @@
                                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer Text Section -->
+                        <div class="mb-8">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center border-b pb-2">
+                                <svg class="w-6 h-6 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                </svg>
+                                Teks Footer
+                            </h3>
+
+                            <div>
+                                <label for="footer_text" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Deskripsi Footer
+                                    <span class="text-gray-500 text-xs font-normal">- Opsional</span>
+                                </label>
+                                <textarea id="footer_text" name="footer_text" rows="3" class="w-full rounded-lg border-gray-300 focus:border-orange-500 focus:ring-orange-500 @error('footer_text') @enderror" placeholder="Badan Penanggulangan Bencana Daerah Kabupaten Katingan. Siap melayani dan melindungi masyarakat dari ancaman bencana.">{{ old('footer_text', $informasiKontak->footer_text) }}</textarea>
+                                <p class="mt-1 text-xs text-gray-500">Teks ini akan ditampilkan di bagian footer website. Maksimal 500 karakter.</p>
+                                @error('footer_text')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 

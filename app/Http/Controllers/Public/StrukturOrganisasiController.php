@@ -12,7 +12,7 @@ class StrukturOrganisasiController extends Controller
     {
         try {
             // Ambil data kepala dinas/kepala pelaksana untuk sambutan
-            $kepalaDinas = StrukturOrganisasi::kepala()
+            $kepalaDinas = StrukturOrganisasi::ketua()
                 ->active()
                 ->first();
 
@@ -20,7 +20,7 @@ class StrukturOrganisasiController extends Controller
             $strukturOrganisasi = StrukturOrganisasi::active()
                 ->ordered()
                 ->get()
-                ->groupBy('tipe_jabatan');
+                ->groupBy('urutan');
 
         } catch (\Exception $e) {
             // Jika ada error, set data kosong

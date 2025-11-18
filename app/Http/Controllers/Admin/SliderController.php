@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Slider; // 1. Import Model Slider
+use App\Traits\LogsActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage; // 2. Import Storage Facade untuk mengelola file
 
 class SliderController extends Controller
 {
+    use LogsActivity;
+
     /**
      * Menampilkan daftar semua slide.
      */
@@ -47,7 +50,7 @@ class SliderController extends Controller
         $imagePath = $request->file('image')->store('sliders', 'public');
 
         // Simpan data ke database
-        Slider::create([
+        $slider = Slider::create([
             'title' => $request->title,
             'subtitle' => $request->subtitle,
             'link' => $request->link,
@@ -55,6 +58,9 @@ class SliderController extends Controller
             'sequence' => $request->sequence,
             'is_active' => $request->has('is_active'), // Jika checkbox dicentang, nilainya true
         ]);
+        
+        // Log activity
+        $this->logCreate('Slider', $slider->title);
 
         // Arahkan kembali ke halaman index dengan pesan sukses
         return redirect()->route('admin.sliders.index')->with('success', 'Slide baru berhasil ditambahkan.');
@@ -102,6 +108,9 @@ class SliderController extends Controller
             'sequence' => $request->sequence,
             'is_active' => $request->has('is_active'),
         ]);
+        
+        // Log activity
+        $this->logUpdate('Slider', $slider->title);
 
         return redirect()->route('admin.sliders.index')->with('success', 'Slide berhasil diperbarui.');
     }
@@ -111,11 +120,16 @@ class SliderController extends Controller
      */
     public function destroy(Slider $slider)
     {
+        $sliderTitle = $slider->title;
+        
         // Hapus file gambar dari storage
         Storage::disk('public')->delete($slider->image);
 
         // Hapus data dari database
         $slider->delete();
+        
+        // Log activity
+        $this->logDelete('Slider', $sliderTitle);
 
         return redirect()->route('admin.sliders.index')->with('success', 'Slide berhasil dihapus.');
     }
