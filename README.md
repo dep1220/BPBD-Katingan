@@ -31,7 +31,7 @@ Website resmi Badan Penanggulangan Bencana Daerah (BPBD) Kabupaten Katingan untu
 ## 📦 Requirements (Server/Hosting)
 
 ### Software yang Harus Diinstall:
-- **PHP** >= 8.2
+- **PHP** >= PHP 8.3.24
 - **Composer** >= 2.0
 - **Node.js** >= 18.x & **NPM** >= 9.x
 - **MySQL** >= 8.0 / **MariaDB** >= 10.3
