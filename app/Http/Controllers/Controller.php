@@ -13,10 +13,6 @@ namespace App\Http\Controllers;
  *             url="https://bpbd.katingankab.go.id"
  *         )
  *     ),
- *     @OA\Server(
- *         url=L5_SWAGGER_CONST_HOST,
- *         description="API Server"
- *     ),
  *     tags={
  *         @OA\Tag(
  *             name="Authentication",
